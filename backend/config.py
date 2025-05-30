@@ -1,0 +1,4 @@
+SPOTIPY_CLIENT_ID = ''
+SPOTIPY_CLIENT_SECRET = ''
+SPOTIPY_CLIENT_URL = "http://localhost:8080/callback"
+SCOPE_MASTER = ''
