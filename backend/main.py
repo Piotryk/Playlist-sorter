@@ -276,6 +276,7 @@ if __name__ == '__main__':
 
     @app.route("/get_songs/<playlist_id>/<reversed>/<start>/<stop>/")
     def get_songs_for_sorter(playlist_id, reversed, start, stop):
+        reversed = int(reversed)
         start = int(start)
         stop = int(stop)
         songs, local_songs, playlist_len, playlist_name = utilities.get_songs_from_playlist(spotify, playlist_id)
@@ -334,15 +335,25 @@ if __name__ == '__main__':
         TODO:
         check if offset < track lenght      otherwise it will play next song i think?
         """
+
+
+
         uri = "spotify:track:" + song_id
-        uri_2 = uri
+        playlist_uri = "spotify:playlist:" + Database['playlist_id']
+
+        #uri_2 = uri
+        #print(Database['song_left'], Database['song_right'])
         if song_id == Database['song_left']['id']:
             uri_2 = "spotify:track:" + Database['song_right']['id']
         if song_id == Database['song_right'] ['id']:
             uri_2 = "spotify:track:" + Database['song_left']['id']
         uris = [uri, uri_2]
+        #print(song_id)
+        #print(uri, uri_2)
+        #print(Database['song_left']['name'], Database['song_right']['name'])
+        #print(uris)
         try:
-            spotify.start_playback(uris=uris, position_ms=offset)
+            spotify.start_playback(context_uri=playlist_uri, offset={'uri': uri}, position_ms=offset)
             return jsonify({'success': True, 'message': "Working"})
         except:
             return jsonify({'success': False, 'message': "Cannot play a song. Check if you have Spotify opened and start any song."})
